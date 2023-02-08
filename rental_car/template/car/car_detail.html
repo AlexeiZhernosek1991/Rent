@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+     <div class="row">
+         <div class="col-3">
+            <h1>{{car.car_model}}</h1>
+            <p> Регистрационный знак - {{car.register_num}}</p>
+            <p> Тип кузова - {{car.body_type}}</p>
+            <p> Количество мест - {{car.places}}</p>
+            <p> Тип топлива - {{car.type_fuel}}</p>
+            <p> Коробки передач - {{car.transmission}}</p>
+            <p> Объем двигателя - {{car.engine_capacity}}</p>
+            <p> Мощность двигателя - {{car.power_engine}}</p>
+         </div>
+         <div class="col-5">
+            <p><img class="img-article-left" src="{{car.photo.photo_start.url}}" width="auto" height="350px"></p>
+             <h2>  <a href="{{car.video_review}}" > Видео обзор автомобиля </a> </h2>
+             <p><a href="{% url 'order' %}">Заказать {{car.car_model}}</a></p>
+            </form>
+         </div>
+         <div class="col-4">
+            <p><img class="img-article-left" src="{{car.photo.photo_1.url}}" width="auto" height="250px"></p>
+            <p><img class="img-article-left" src="{{car.photo.photo_2.url}}" width="auto" height="250px"></p>
+            <p><img class="img-article-left" src="{{car.photo.photo_3.url}}" width="auto" height="250px"></p>
+            <p><img class="img-article-left" src="{{car.photo.photo_4.url}}" width="auto" height="250px"></p>
+         </div>
+    </div>
+</div>
+{% endblock %}

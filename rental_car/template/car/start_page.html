@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+<ul>
+    {% for c in car %}
+        <li><a href="{{ c.get_absolute_url }}"> {{ c.car_model }} </a></li>
+    {% endfor %}
+</ul>
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<h1> {{title}}</h1>
+
+<form action="{% url 'comment' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+<div class="form-error">{{ form.non_field_errors }}</div>
+{% for f in form %}
+<p><label class="form-label" for="{{ f.id_for_label }}">{{f.label}}: </label>{{ f }}</p>
+<div class="form-error">{{ f.errors }}</div>
+{% endfor %}
+    <button type="submit">Добавить</button>
+</form>
+<br>
+{% for c in object_list %}
+    <h2> {{ c.date }} </h2>
+    <h1> {{ c.name }} </h1>
+    <p> {{ c.comment }} </p>
+    <p> {{ c.email }} </p>
+    <p> <img class="img-article-left" src="{{c.photo.url}}"></p>
+    {% endfor %}
+{% endblock %}
