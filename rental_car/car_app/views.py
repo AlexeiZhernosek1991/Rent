@@ -1,5 +1,8 @@
+from django.contrib.auth import logout, login
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.views import LoginView
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView
 
@@ -63,30 +66,48 @@ class CarCategory(DataMixin, ListView):
         return dict(list(context.items()) + list(context_def.items()))
 
 
-class AddCarOrder(DataMixin, CreateView):
-    model = Order
-    form_class = AddOrderForm
-    template_name = 'car/order.html'
-    success_url = reverse_lazy('order')
+def order(request, slug):
+    car = Car.objects.get(slug=slug)
+    form = AddOrderForm()
+    if request.method == 'POST':
+        pass
+    context = {
+        'car': car,
+        'menu': menu,
+        'form': form
+    }
+    return render(request, 'car/order.html', context)
+
+
+class Register(DataMixin, CreateView):
+    form_class = RegisterForm
+    template_name = 'car/register.html'
+    success_url = reverse_lazy('login')
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        contex_def = self.get_user_context(title='Регистрация')
+        return dict(list(context.items()) + list(contex_def.items()))
 
     def form_valid(self, form):
-        fields = form.save(commit=False)
-        fields.name = Car.objects.get(slug=self.request.slug)
-        fields.day_rent = form.fields.date_over - form.fields.date_star
-        if fields.day_rent < 6:
-            fields.price_rent = fields.day_rent * fields.name.price_one_five
-        elif 5 < fields.day_rent < 11:
-            fields.price_rent = fields.day_rent * fields.name.price_five_ten
-        elif 11 < fields.day_rent:
-            fields.price_rent = fields.day_rent * fields.name.price_ten
-        fields.save()
-        return super().form_valid(form)
+        user = form.save()
+        login(self.request, user)
+        return redirect('start_page')
 
-    def get_context_data(self,  **kwargs):
+
+class LoginUser(DataMixin, LoginView):
+    form_class = LoginUserForm
+    template_name = 'car/login.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Заказ'
-        context['menu'] = menu
-        return context
+        contex_def = self.get_user_context(title='Авторизация')
+        return dict(list(context.items()) + list(contex_def.items()))
+
+
+def logout_user(request):
+    logout(request)
+    return redirect('login')
 
 
 def about_us(request):

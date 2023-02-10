@@ -4,8 +4,8 @@ from .form import AddCommentForm
 from .models import Comment
 
 menu = [{'title': "Главная страница", 'url_name': 'start_page'},
-        {'title': "О нас", 'url_name': 'about_us'},
         {'title': "Автопарк", 'url_name': 'cars'},
+        {'title': "О нас", 'url_name': 'about_us'},
         {'title': "Отзывы", 'url_name': 'comment'},
         ]
 
@@ -21,6 +21,3 @@ class Addcomment(CreateView, ListView):
         context['title'] = 'Отзывы'
         context['menu'] = menu
         return context
-
-
-
