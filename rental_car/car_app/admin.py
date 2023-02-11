@@ -4,7 +4,7 @@ from .models import *
 
 class CarAdmin(admin.ModelAdmin):
     list_display = ('id', 'car_model', 'slug', 'category', 'register_num')
-    list_display_links = ('id', 'category')
+    list_display_links = ('car_model',)
     list_filter = ('category', 'type_fuel')
     prepopulated_fields = {"slug": ("car_model",)}
 
@@ -23,3 +23,4 @@ admin.site.register(Photo)
 admin.site.register(Transmission)
 admin.site.register(Type_fuel)
 admin.site.register(Order)
+admin.site.register(Drive_unit)

@@ -1,8 +1,13 @@
 {% extends 'base.html' %}
 {% block content %}
-Ваш заказ
+{% if request.user.is_authenticated %}
+<h2>Ваш заказ</h2>
  <p>{{ car.car_model }}</p>
-<form action="{% url 'cars' %}" method="post" enctype="multipart/form-data">
+ <p>Зарезервированные даты:</p>
+{% for order in get_orders_all %}
+    <p>{{ order.date_star }}-{{ order.date_over }}</p>
+{% endfor %}
+<form action="{% url 'order' car.slug %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
 <div class="form-error">{{ form.non_field_errors }}</div>
 {% for f in form %}
@@ -11,4 +16,16 @@
 {% endfor %}
     <button type="submit">Оформить Заказать</button>
 </form>
+{% else %}
+<h3> Если хотите заказать автомобиль сначала зарегистрируйтесь и авторизуйтесь.</h3>
+<h3>Затем выберите интересующий вас авто.</h3>
+<ul>
+    <li>
+        <a class="nav-link" aria-current="page" href="{% url 'register' %}">Регистрация</a>
+    </li>
+    <li>
+        <a class="nav-link" aria-current="page" href="{% url 'login' %}">Авторизация</a>
+    </li>
+</ul>
+{% endif %}
 {% endblock %}

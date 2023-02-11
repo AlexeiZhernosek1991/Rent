@@ -1,11 +1,10 @@
 from django.contrib.auth import logout, login
-from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
+from django.views import View
 from django.views.generic import ListView, DetailView, CreateView
-
 from .form import *
 from .models import *
 from .utils import *
@@ -68,15 +67,50 @@ class CarCategory(DataMixin, ListView):
 
 def order(request, slug):
     car = Car.objects.get(slug=slug)
+    get_orders_all = Order.objects.filter(car=car)
     form = AddOrderForm()
     if request.method == 'POST':
-        pass
+        form = AddOrderForm(request.POST)
+        if form.is_valid():
+            day_rent = str(form.cleaned_data['date_over'] - form.cleaned_data['date_star'])
+            day_rent = int(day_rent.split()[0])
+            price_rent = car.price_one_five
+            if 5 < day_rent < 11:
+                price_rent = car.price_five_ten * day_rent
+            elif 10 < day_rent:
+                price_rent = car.price_ten * day_rent
+            order = Order(
+                name=request.user.username,
+                date_star=form.cleaned_data['date_star'],
+                date_over=form.cleaned_data['date_over'],
+                day_rent=day_rent,
+                price_rent=price_rent,
+                telefon_num=form.cleaned_data['telefon_num'],
+                address=form.cleaned_data['address'],
+                car=car
+            )
+            order.save()
     context = {
         'car': car,
         'menu': menu,
-        'form': form
+        'form': form,
+        'get_orders_all': get_orders_all
     }
     return render(request, 'car/order.html', context)
+
+
+def contacts(request):
+    context = {
+        'menu': menu,
+    }
+    return render(request, 'car/contact.html', context)
+
+
+def about_us(request):
+    context = {
+        'menu': menu,
+    }
+    return render(request, 'car/about.html', context)
 
 
 class Register(DataMixin, CreateView):
@@ -108,11 +142,3 @@ class LoginUser(DataMixin, LoginView):
 def logout_user(request):
     logout(request)
     return redirect('login')
-
-
-def about_us(request):
-    return HttpResponse("О нас")
-
-
-def contacts(request):
-    return HttpResponse("Контакты")

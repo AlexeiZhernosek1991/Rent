@@ -7,6 +7,7 @@ menu = [{'title': "Главная страница", 'url_name': 'start_page'},
         {'title': "Автопарк", 'url_name': 'cars'},
         {'title': "О нас", 'url_name': 'about_us'},
         {'title': "Отзывы", 'url_name': 'comment'},
+        {'title': "Контакты", 'url_name': 'contacts'}
         ]
 
 

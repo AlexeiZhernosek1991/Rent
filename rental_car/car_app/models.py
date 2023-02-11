@@ -62,6 +62,17 @@ class Transmission(models.Model):
         verbose_name_plural = "Коробки передач"
 
 
+class Drive_unit(models.Model):
+    drive_unit = models.CharField(max_length=200, verbose_name="Привод колес")
+
+    def __str__(self):
+        return self.drive_unit
+
+    class Meta:
+        verbose_name = "Привод колес"
+        verbose_name_plural = "Привод колес"
+
+
 class Car(models.Model):
     car_model = models.CharField(max_length=200, blank=True, verbose_name="Модель")
     register_num = models.CharField(max_length=200, blank=True, verbose_name="Регистрационный знак")
@@ -77,8 +88,12 @@ class Car(models.Model):
     engine_capacity = models.FloatField(blank=True, verbose_name="Объем двигателя")
     power_engine = models.IntegerField(blank=True, verbose_name="Мощность двигателя")
     type_fuel = models.ForeignKey('Type_fuel', on_delete=models.PROTECT, blank=True, verbose_name="Тип топлива")
+    fuel_consumption_track = models.CharField(max_length=200, blank=True, verbose_name="Расход топлива - трасса")
+    fuel_consumption_city = models.CharField(max_length=200, blank=True, verbose_name="Расход топлива - город")
     transmission = models.ForeignKey('Transmission', on_delete=models.PROTECT, blank=True,
                                      verbose_name="Коробки передач")
+    drive_unit = models.ForeignKey('Drive_unit', on_delete=models.PROTECT, blank=True,
+                                   verbose_name="Привод колес")
     photo = models.ForeignKey('Photo', on_delete=models.PROTECT, blank=True, verbose_name="Фото")
 
     def __str__(self):
@@ -111,14 +126,16 @@ class Photo(models.Model):
 
 class Order(models.Model):
     name = models.CharField(max_length=200, verbose_name="ФИО")
-    date_star = models.IntegerField(verbose_name="Дата начала аренды")
-    date_over = models.IntegerField(verbose_name="Дата завершения аренды")
-    date_order = models.DateField(auto_created=True)
-    day_rent = models.IntegerField(verbose_name="Количество дней аренды")
+    date_star = models.DateField(verbose_name="Дата начала аренды")
+    date_over = models.DateField(verbose_name="Дата завершения аренды")
+    date_order = models.DateField(auto_now_add=True, verbose_name="Дата Заказа")
+    day_rent = models.IntegerField(blank=True, default='1', verbose_name="Количество дней аренды")
     telefon_num = models.IntegerField(verbose_name="Номер телефона")
     email = models.EmailField(blank=True, verbose_name="Email")
-    price_rent = models.IntegerField(verbose_name="Стоимость аренды")
+    price_rent = models.FloatField(blank=True, verbose_name="Стоимость аренды")
     car = models.ForeignKey('Car', on_delete=models.PROTECT, verbose_name="Автомобиль")
+    order_processing = models.BooleanField(default=False, verbose_name="Обработан заказ")
+    address = models.CharField(max_length=500, default="Адрес не был указан", verbose_name="Адрес доставки автомобиля")
 
     def __str__(self):
         return self.name

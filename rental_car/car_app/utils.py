@@ -3,7 +3,9 @@ from .models import Category
 menu = [{'title': "Главная страница", 'url_name': 'start_page'},
         {'title': "Автопарк", 'url_name': 'cars'},
         {'title': "О нас", 'url_name': 'about_us'},
-        {'title': "Отзывы", 'url_name': 'comment'},]
+        {'title': "Отзывы", 'url_name': 'comment'},
+        {'title': "Контакты", 'url_name': 'contacts'},
+        ]
 
 
 class DataMixin:
@@ -18,3 +20,6 @@ class DataMixin:
         if 'cat_selected' not in context:
             context['cat_selected'] = 0
         return context
+
+
+

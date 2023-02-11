@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <h1> {{title}}</h1>
-
+{% if request.user.is_authenticated %}
 <form action="{% url 'comment' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
 <div class="form-error">{{ form.non_field_errors }}</div>
@@ -11,12 +11,23 @@
 {% endfor %}
     <button type="submit">Добавить</button>
 </form>
+{% else %}
+<h2>Ели вы хотите оставить отзыв сначала зарегистрируйтесь и авторизуйтесь</h2>
+<ul>
+    <li>
+        <a class="nav-link" aria-current="page" href="{% url 'register' %}">Регистрация</a>
+    </li>
+    <li>
+        <a class="nav-link" aria-current="page" href="{% url 'login' %}">Авторизация</a>
+    </li>
+</ul>
+{% endif %}
 <br>
 {% for c in object_list %}
-    <h2> {{ c.date }} </h2>
-    <h1> {{ c.name }} </h1>
+    <h3> {{ c.date }} </h3>
+    <h2> {{ c.name }} </h2>
     <p> {{ c.comment }} </p>
     <p> {{ c.email }} </p>
-    <p> <img class="img-article-left" src="{{c.photo.url}}"></p>
+    <p> <img class="img-article-left" src="{{c.photo.url}}" width="auto" height="350px"></p>
     {% endfor %}
 {% endblock %}

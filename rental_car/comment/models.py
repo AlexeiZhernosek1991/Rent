@@ -6,7 +6,9 @@ class Comment(models.Model):
     comment = models.TextField(verbose_name="Отзыв")
     date = models.DateTimeField(auto_now_add=True)
     email = models.EmailField(verbose_name="Email")
-    photo = models.ImageField(upload_to=f'img/comment/%Y/%m/%d/', verbose_name="Фото")
+    photo = models.ImageField(upload_to=f'img/comm ent/%Y/%m/%d/', verbose_name="Фото")
+    processed_or_not = models.BooleanField(default=False, verbose_name="Обработан отзыв")
+    answer = models.TextField(verbose_name="Ответ на отзыв")
 
     def __str__(self):
         return self.name
