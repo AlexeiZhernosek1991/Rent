@@ -1,9 +1,7 @@
 from django.contrib.auth import logout, login
 from django.contrib.auth.views import LoginView
-from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.views import View
 from django.views.generic import ListView, DetailView, CreateView
 from .form import *
 from .models import *
@@ -16,7 +14,7 @@ class StartPageListViwe(DataMixin, ListView):
     context_object_name = 'car'
 
     def get_queryset(self):
-        return Car.objects.filter(pk__in=[1, 2, 3])
+        return Car.objects.all()[1:4]
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -25,13 +23,14 @@ class StartPageListViwe(DataMixin, ListView):
 
 
 class CarPageListViwe(DataMixin, ListView):
+    paginate_by = 3
     model = Car
     template_name = 'car/car_list.html'
     context_object_name = 'car'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        contex_def = self.get_user_context(title='Автопарк')
+        contex_def = self.get_user_context(title='Наши Автомобили')
         return dict(list(context.items()) + list(contex_def.items()))
 
 
@@ -43,8 +42,6 @@ class ShowCar(DataMixin, DetailView, ):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        form = AddOrderForm()
-        context['form'] = form
         contex_def = self.get_user_context(title='Автомобиль')
         return dict(list(context.items()) + list(contex_def.items()))
 
@@ -70,11 +67,11 @@ def order(request, slug):
     get_orders_all = Order.objects.filter(car=car)
     form = AddOrderForm()
     if request.method == 'POST':
-        form = AddOrderForm(request.POST)
+        form = AddOrderForm(request.POST, request.FILES)
         if form.is_valid():
             day_rent = str(form.cleaned_data['date_over'] - form.cleaned_data['date_star'])
             day_rent = int(day_rent.split()[0])
-            price_rent = car.price_one_five
+            price_rent = car.price_one_five * day_rent
             if 5 < day_rent < 11:
                 price_rent = car.price_five_ten * day_rent
             elif 10 < day_rent:
@@ -87,30 +84,48 @@ def order(request, slug):
                 price_rent=price_rent,
                 telefon_num=form.cleaned_data['telefon_num'],
                 address=form.cleaned_data['address'],
-                car=car
-            )
+                baby_seat=form.cleaned_data['baby_seat'],
+                photo_passport=form.cleaned_data['photo_passport'],
+                photo_driving_license=form.cleaned_data['photo_driving_license'],
+                car=car,
+                email=form.cleaned_data['email'])
             order.save()
+            return redirect('order_finish')
     context = {
         'car': car,
         'menu': menu,
         'form': form,
-        'get_orders_all': get_orders_all
+        'get_orders_all': get_orders_all,
+        'cats': get_cats()
     }
-    return render(request, 'car/order.html', context)
+    return render(request, 'order/order.html', context)
+
+
+def order_finish(request):
+    order = Order.objects.filter(name=request.user.username).order_by('-id')[0]
+    context = {
+        'menu': menu,
+        'order': order,
+        'cats': get_cats()
+    }
+    return render(request, 'order/order_finish.html', context)
 
 
 def contacts(request):
     context = {
         'menu': menu,
+        'cats': get_cats(),
+        'title': 'Контакты'
     }
     return render(request, 'car/contact.html', context)
 
 
-def about_us(request):
+def partner(request):
     context = {
         'menu': menu,
+        'cats': get_cats()
     }
-    return render(request, 'car/about.html', context)
+    return render(request, 'car/partner.html', context)
 
 
 class Register(DataMixin, CreateView):
@@ -141,4 +156,4 @@ class LoginUser(DataMixin, LoginView):
 
 def logout_user(request):
     logout(request)
-    return redirect('login')
+    return redirect('start_page')

@@ -3,19 +3,35 @@
 <div class="container">
      <div class="row">
          <div class="col-3">
-            <h1>{{car.car_model}}</h1>
-            <p> Регистрационный знак - {{car.register_num}}</p>
-            <p> Тип кузова - {{car.body_type}}</p>
-            <p> Количество мест - {{car.places}}</p>
-            <p> Тип топлива - {{car.type_fuel}}</p>
-            <p> Коробки передач - {{car.transmission}}</p>
-            <p> Объем двигателя - {{car.engine_capacity}}</p>
-            <p> Мощность двигателя - {{car.power_engine}}</p>
+            <h2>{{car.car_model}}</h2>
+            <p> Регистрационный знак - {{car.register_num}}<br>
+             Цвет - {{car.color}} <br>
+             Тип кузова - {{car.body_type}}<br>
+             Количество мест - {{car.places}}<br>
+             Коробки передач - {{car.transmission}}<br>
+             Объем двигателя - {{car.engine_capacity}}<br>
+             Мощность двигателя - {{car.power_engine}} л.с. <br>
+             Тип топлива - {{car.type_fuel}}<br>
+             Расход топлива трасса - {{car.fuel_consumption_track}}<br>
+             Расход топлива город - {{car.fuel_consumption_city}}<br>
+             Привод - {{car.drive_unit}}<br>
+             Категория - {{car.category}}<br>
+             <h3>СПРАВОЧНО:</h3>
+             <li>Стоимость детское кресло - 20 руб.</li><br>
+             <li>Cтоимость услуги по доставке автомобиля на адрес
+             расчитывается в зависимости от
+             удаленности от основной стоянки.</li><br>
+             <li>Автомобиль возвращается с тем же количеством топлива
+             с которым взят в аренду</li>
+            </p>
          </div>
          <div class="col-5">
             <p><img class="img-article-lft" src="{{car.photo.photo_start.url}}" width="auto" height="350px"></p>
              <h2>  <a href="{{car.video_review}}" > Видео обзор автомобиля </a> </h2>
-             <p><a href="{% url 'order' car.slug %}">Заказать {{car.car_model}}</a></p>
+             <h4>Цена от 1 до 5 дней-{{car.price_one_five}} руб. </h4>
+             <h4>Цена от 5 до 10 дней-{{car.price_five_ten}} руб. </h4>
+             <h4>Цена от 10 дней-{{car.price_ten}} руб. </h4>
+             <h2><a href="{% url 'order' car.slug %}">Заказать {{car.car_model}}</a></h2>
          </div>
          <div class="col-4">
             <p><img class="img-article-left" src="{{car.photo.photo_1.url}}" width="auto" height="250px"></p>

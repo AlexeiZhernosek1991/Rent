@@ -2,16 +2,11 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView
 from .form import AddCommentForm
 from .models import Comment
-
-menu = [{'title': "Главная страница", 'url_name': 'start_page'},
-        {'title': "Автопарк", 'url_name': 'cars'},
-        {'title': "О нас", 'url_name': 'about_us'},
-        {'title': "Отзывы", 'url_name': 'comment'},
-        {'title': "Контакты", 'url_name': 'contacts'}
-        ]
+from car_app.utils import get_cats, menu, DataMixin
 
 
-class Addcomment(CreateView, ListView):
+class Addcomment(DataMixin, CreateView, ListView):
+    paginate_by = 3
     model = Comment
     form_class = AddCommentForm
     template_name = 'comment/comment.html'
@@ -19,6 +14,9 @@ class Addcomment(CreateView, ListView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Отзывы'
-        context['menu'] = menu
-        return context
+        contex_def = self.get_user_context(title='Отзывы')
+        return dict(list(context.items()) + list(contex_def.items()))
+
+    def form_valid(self, form):
+        form.instance.name = self.request.user
+        return super().form_valid(form)

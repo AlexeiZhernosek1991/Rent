@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+ <div class="container">
+  <h1>Наши Партнеры</h1>
+  <div class="row">
+ <div class="col-8">
+  <a href="https://wdrive.by/" class="d-flex align-items-center p-0 text-dark"><h2>Автосервисы</h2>
+            <img alt="logo" src='{% static "logo/wdrivelogo.png" %}' width="300px" />
+ </a><br>
+  <a href="https://zap.by" class="d-flex align-items-center p-0 text-dark">
+            <img alt="logo" src='{% static "logo/zap.jpeg" %}' width="300px" /><h2>Автозапчасти</h2>
+ </a><br>
+  <a href="https://megamoika.by/himchistka-salona/?ysclid=le4na7pvg342772834" class="d-flex align-items-center p-0 text-dark">
+            <h2>Автомойка</h2><img alt="logo" src='{% static "logo/megamojka.png" %}' width="300px" />
+ </a><br>
+  <a href="https://autoset.by" class="d-flex align-items-center p-0 text-dark">
+            <img alt="logo" src='{% static "logo/avtosett.jpg" %}' width="300px" /><h2>Автошины</h2>
+ </a><br>
+  </div>
+  <div class="col-4">
+   <h2>БЛАГОДАРИМ ВСЕХ ЗА ОКАЗАНОЕ СОДЕЙСТВИЕ</h2>
+   </div>
+  </div>
+  <h1>Главный партнер <br> <a href="https://myitschool.by/?ysclid=le2tuf2zut503605958" >
+            <img alt="logo" src='{% static "logo/logo2.png" %}' width="400px" />
+ </a></h1>
+
+ </div>
+{% endblock %}

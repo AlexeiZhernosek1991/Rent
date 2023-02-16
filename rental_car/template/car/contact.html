@@ -1,4 +1,30 @@
  {% extends 'base.html' %}
 {% block content %}
-Контакты
+ <h1> {{ title }} </h1>
+ <div class="container">
+     <div class="row">
+        <div class="col-6">
+            <div id="map"></div>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3002.445355644778!2d27.652822467454424!3d53.93392858746597!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x46dbcf51696f7ac7%3A0x64eda3a6c9f3bf99!2sDana%20mall!5e0!3m2!1sru!2sby!4v1676292459180!5m2!1sru!2sby" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                <script
+                  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&callback=initMap&v=weekly"
+                  defer
+                ></script>
+        </div>
+        <div class="col-6">
+            <h4>Наш офис и автомобили располагаются по адресу: <br>
+                г. Минск, ул. Петра Мстиславца 9 в ТЦ "Danna mall"<br>
+            Автомобили расположены на подземной стоянке
+            <br>
+            <br>
+            Тел. для справок :
+            <br>МТС +3752977777777
+            <br>А1  +3754477777777
+            <br>
+            <br>
+            Email: my_rent_car@mail.ru
+            </h4>
+        </div>
+     </div>
+</div>
 {% endblock %}

@@ -15,6 +15,12 @@ class CategoryAdmin(admin.ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
 
 
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'car', 'order_processing', 'price_rent')
+    list_display_links = ('name', 'car')
+    list_filter = ('order_processing', 'name', 'car')
+
+
 admin.site.register(Car, CarAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Color)
@@ -22,5 +28,5 @@ admin.site.register(Body_type)
 admin.site.register(Photo)
 admin.site.register(Transmission)
 admin.site.register(Type_fuel)
-admin.site.register(Order)
+admin.site.register(Order, OrderAdmin)
 admin.site.register(Drive_unit)

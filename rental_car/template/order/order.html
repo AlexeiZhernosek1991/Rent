@@ -1,12 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
+<div class="container">
 {% if request.user.is_authenticated %}
+<div>
 <h2>Ваш заказ</h2>
  <p>{{ car.car_model }}</p>
  <p>Зарезервированные даты:</p>
 {% for order in get_orders_all %}
-    <p>{{ order.date_star }}-{{ order.date_over }}</p>
+    {% if order.order_completed == False %}
+    <p>c {{ order.date_star }} по {{ order.date_over }}</p>
+{% endif %}
 {% endfor %}
+</div>
 <form action="{% url 'order' car.slug %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
 <div class="form-error">{{ form.non_field_errors }}</div>
@@ -28,4 +33,5 @@
     </li>
 </ul>
 {% endif %}
+</div>
 {% endblock %}

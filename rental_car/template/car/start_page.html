@@ -1,10 +1,29 @@
 {% extends 'base.html' %}
 {% block content %}
+<h1>RENT CAR</h1>
 <div class="container">
-<ul>
-    {% for c in car %}
-        <li><a href="{{ c.get_absolute_url }}"> {{ c.car_model }} </a></li>
-    {% endfor %}
-</ul>
+    <h4> Все наши автомобили не старше 5 лет и оборудованы кондиционером. <br>
+         Вы можете заказать дополнительно с автомобилем детское кресло. <br>
+         Мы доставим вобранный автомобиль по указанному адресу. <br>
+         Все автомобили имеют полное страхование от ДТП и страхование здоровья пассажиров.
+    </h4>
 </div>
+<div class="container">
+    <div class="row">
+    {% for c in car %}
+    <div class="col-4">
+        <div class="card" style="width: 18rem;">
+        <img src="{{c.photo.photo_start.url}}" class="card-img-top" >
+        <div class="card-body">
+            <h5 class="card-title">{{ c.car_model }}</h5>
+            <p class="card-text"> Коробка: {{ c.transmission }} <br> Тип топлива: {{ c.type_fuel }} <br>
+            Стоимость: от {{ c.price_ten }} до {{ c.price_one_five }} руб. </p>
+            <a href="{{ c.get_absolute_url }}" class="btn btn-primary">ПОСМОТРЕТЬ ПОДРОБНЕЕ</a>
+        </div>
+    </div>
+    </div>
+        {% endfor %}
+    </div>
+</div>
+
 {% endblock %}

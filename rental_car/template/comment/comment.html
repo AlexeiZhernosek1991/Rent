@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+<div class="container">
 <h1> {{title}}</h1>
 {% if request.user.is_authenticated %}
 <form action="{% url 'comment' %}" method="post" enctype="multipart/form-data">
@@ -15,19 +16,23 @@
 <h2>Ели вы хотите оставить отзыв сначала зарегистрируйтесь и авторизуйтесь</h2>
 <ul>
     <li>
-        <a class="nav-link" aria-current="page" href="{% url 'register' %}">Регистрация</a>
+        <a href="{% url 'register' %}">Регистрация</a>
     </li>
     <li>
-        <a class="nav-link" aria-current="page" href="{% url 'login' %}">Авторизация</a>
+        <a href="{% url 'login' %}">Авторизация</a>
     </li>
 </ul>
 {% endif %}
+</div>
 <br>
+<div class="container">
 {% for c in object_list %}
-    <h3> {{ c.date }} </h3>
-    <h2> {{ c.name }} </h2>
-    <p> {{ c.comment }} </p>
-    <p> {{ c.email }} </p>
-    <p> <img class="img-article-left" src="{{c.photo.url}}" width="auto" height="350px"></p>
+    <h3> {{ c.date }} {{ c.name }} </h3>
+    <h4>{% if c.photo %} <img class="img-article-left" src="{{c.photo.url}}" width="auto" height="180px"> {% endif %}
+    Отзыв: {{ c.comment }} </h4>
+    {% if c.answer %}
+    <h4>Ответ {{ c.answer }}</h4>>
+    {% endif %}
     {% endfor %}
+</div>
 {% endblock %}
