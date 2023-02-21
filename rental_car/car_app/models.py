@@ -52,7 +52,7 @@ class Type_fuel(models.Model):
 
 
 class Transmission(models.Model):
-    transmission = models.CharField(max_length=200, verbose_name="Тип топлива")
+    transmission = models.CharField(max_length=200, verbose_name="Коробка передач")
 
     def __str__(self):
         return self.transmission
@@ -73,17 +73,41 @@ class Drive_unit(models.Model):
         verbose_name_plural = "Привод колес"
 
 
+class Sail(models.Model):
+    sail = models.IntegerField(verbose_name="Скидка")
+
+    def __str__(self):
+        return f'Скидка {self.sail} %'
+
+    class Meta:
+        verbose_name = "Скидка"
+        verbose_name_plural = "Скидки"
+
+
+class Front_car(models.Model):
+    car = models.ForeignKey('Car', on_delete=models.PROTECT, verbose_name="Цвет")
+
+    def __str__(self):
+        return f'Машина главной страницы{self.car}'
+
+    class Meta:
+        verbose_name = "Машина главной страницы"
+        verbose_name_plural = "Машины главной страницы"
+
+
 class Car(models.Model):
     car_model = models.CharField(max_length=200, blank=True, verbose_name="Модель")
     register_num = models.CharField(max_length=200, blank=True, verbose_name="Регистрационный знак")
     slug = models.SlugField(max_length=255, unique=True, db_index=True, verbose_name="URL")
-    color = models.ManyToManyField('Color', blank=True, verbose_name="Цвет")
+    color = models.ForeignKey('Color', on_delete=models.PROTECT, blank=True, verbose_name="Цвет")
     body_type = models.ForeignKey('Body_type', on_delete=models.PROTECT, blank=True, verbose_name="Тип кузова")
+    year = models.IntegerField(blank=True, verbose_name="Год выпуска")
     places = models.IntegerField(blank=True, verbose_name="Количество мест")
     category = models.ForeignKey('Category', on_delete=models.PROTECT, verbose_name="Категория")
     price_one_five = models.FloatField(blank=True, verbose_name="Цена от 1 до 5 дней")
     price_five_ten = models.FloatField(blank=True, verbose_name="Цена от 5 до 10 дней")
     price_ten = models.FloatField(blank=True, verbose_name="Цена от 10 дней")
+    sail = models.ForeignKey('Sail', on_delete=models.PROTECT, blank=True, verbose_name="Скидка")
     video_review = models.URLField(max_length=500, blank=True, verbose_name="Обзор автомобиля")
     engine_capacity = models.CharField(max_length=200, blank=True, verbose_name="Объем двигателя")
     power_engine = models.IntegerField(blank=True, verbose_name="Мощность двигателя")
@@ -143,7 +167,7 @@ class Order(models.Model):
     photo_driving_license = models.ImageField(upload_to='img/driving_license/%Y/%m/%d/', blank=True,
                                               verbose_name="Фото фото водительских прав")
     info = models.TextField(max_length=200, default="Комментарий",
-                               verbose_name="Комментарии к заказу")
+                            verbose_name="Комментарии к заказу")
 
     def __str__(self):
         return self.name

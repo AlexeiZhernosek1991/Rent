@@ -41,3 +41,6 @@ h1{
 .list-pages .page-num-selected:hover {
 	box-shadow: none;
 }
+
+.p-sail {color: #FF4500;
+}

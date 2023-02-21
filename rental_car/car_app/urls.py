@@ -3,7 +3,8 @@ from .views import *
 
 urlpatterns = [
     path('', StartPageListViwe.as_view(), name='start_page'),
-    path('cars/', CarPageListViwe.as_view(), name='cars'),
+    path('cars/', CarPageListView.as_view(), name='cars'),
+    path('filter/', FilterView.as_view(), name='filter'),
     path('car/<slug:car_slug>/', ShowCar.as_view(), name='car'),
     path('category/<slug:category_slug>/', CarCategory.as_view(), name='category'),
     path('partner/', partner, name='partner'),

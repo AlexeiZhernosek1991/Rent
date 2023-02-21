@@ -3,44 +3,72 @@
 <h1> {{title}}</h1>
 <div class="container">
     <div class="row">
-         <div class="col-3">
-        	<ul>
-            {% if cat_selected == 0 %}
-		    <h3>Все автомобили</h3>
-            {% else %}
-		    <h3><a href="{% url 'cars' %}">Все автомобили</a></h3>
-            {% endif %}
-            {% for c in cats %}
-	            {% if c.pk == cat_selected %}
-		        <li><h4>{{c.name}}</h4></li>
-	            {% else %}
-		        <li><a href="{{ c.get_absolute_url }}"><h4>{{c.name}}</h4></a></li>
-	            {% endif %}
-            {% endfor %}
+        <div class="col-3">
+            <ul>
+                {% if cat_selected == 0 %}
+                <h3>Все автомобили</h3>
+                {% else %}
+                <h3><a href="{% url 'cars' %}">Все автомобили</a></h3>
+                {% endif %}
+                {% for c in cats %}
+                {% if c.pk == cat_selected %}
+                <li><h4>{{c.name}}</h4></li>
+                {% else %}
+                <li><a href="{{ c.get_absolute_url }}"><h4>{{c.name}}</h4></a></li>
+                {% endif %}
+                {% endfor %}
             </ul>
-         </div>
-        <div class="col-9">
+            <br><br>
+        </div>
+        <div class="col-6">
             {% for c in car %}
             <div class="card mb-3" style="max-width: 600px;">
-              <div class="row g-0">
-                <div class="col-md-4">
-                  <img src="{{c.photo.photo_start.url}}" class="img-fluid rounded-start" alt="...">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="{{c.photo.photo_start.url}}" class="img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ c.car_model }}</h5>
+                            <p class="card-text">Коробка: {{ c.transmission }}<br>
+                                Тип топлива: {{ c.type_fuel }}<br>
+                                Количество мест: {{ c.places }}<br>
+                                Стоимость: от {{ c.price_ten }} до {{ c.price_one_five }} руб. <br>
+                                <a href="{{ c.get_absolute_url }}" class="btn btn-primary"> ПОДРОБНЕЕ</a>
+                            </p>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-8">
-                  <div class="card-body">
-                    <h5 class="card-title">{{ c.car_model }}</h5>
-                    <p class="card-text">Коробка: {{ c.transmission }}<br>
-                        Тип топлива: {{ c.type_fuel }}<br>
-                        Количество мест: {{ c.places }}<br>
-                        Стоимость: от {{ c.price_ten }} до {{ c.price_one_five }} руб. <br>
-                        <a href="{{ c.get_absolute_url }}" class="btn btn-primary"> ПОДРОБНЕЕ</a>
-                    </p>
-                  </div>
-                </div>
-              </div>
             </div>
             {% endfor %}
         </div>
+        <div class="col-3">
+            <form action="{% url 'filter' %}" method="get">
+    <div class="left-side my-4">
+        <h3 class="sear-head editContent">Тип топлива</h3>
+        <ul class="w3layouts-box-list">
+            {% for f in fuel %}
+                <li class="editContent">
+                    <input type="checkbox" class="checked" name="fuel" value="{{ f.id }}">
+                    <span class="span editContent">{{ f.type_fuel }}</span>
+                </li>
+            {% endfor %}
+        </ul>
     </div>
-</div>
+                <br>
+    <div class="left-side">
+        <h3 class="sear-head editContent">Тип коробки</h3>
+        <ul class="w3layouts-box-list">
+            {% for t in trans %}
+                <li class="editContent">
+                    <input type="checkbox" class="checked" name="transmission" value="{{ t.id }}">
+                    <span class="span editContent">{{ t.transmission }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    <button type="submit">Найти</button>
+</form>
+        </div>
+    </div>
 {% endblock %}

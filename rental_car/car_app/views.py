@@ -1,5 +1,6 @@
 from django.contrib.auth import logout, login
 from django.contrib.auth.views import LoginView
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView
@@ -9,12 +10,9 @@ from .utils import *
 
 
 class StartPageListViwe(DataMixin, ListView):
-    model = Car
+    model = Front_car
     template_name = 'car/start_page.html'
     context_object_name = 'car'
-
-    def get_queryset(self):
-        return Car.objects.all()[1:4]
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -22,7 +20,7 @@ class StartPageListViwe(DataMixin, ListView):
         return dict(list(context.items()) + list(contex_def.items()))
 
 
-class CarPageListViwe(DataMixin, ListView):
+class CarPageListView(DataMixin, ListView):
     paginate_by = 3
     model = Car
     template_name = 'car/car_list.html'
@@ -46,7 +44,24 @@ class ShowCar(DataMixin, DetailView, ):
         return dict(list(context.items()) + list(contex_def.items()))
 
 
+class FilterView(DataMixin, ListView):
+    paginate_by = 3
+    model = Car
+    template_name = 'car/car_list.html'
+    context_object_name = 'car'
+
+    def get_queryset(self):
+        return Car.objects.filter(Q(type_fuel__in=self.request.GET.getlist('fuel')) &
+                                  Q(transmission__in=self.request.GET.getlist('transmission'))).distinct()
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context_def = self.get_user_context(title='Выбранные автомобили')
+        return dict(list(context.items()) + list(context_def.items()))
+
+
 class CarCategory(DataMixin, ListView):
+    paginate_by = 3
     model = Car
     template_name = 'car/car_list.html'
     context_object_name = 'car'
@@ -76,6 +91,14 @@ def order(request, slug):
                 price_rent = car.price_five_ten * day_rent
             elif 10 < day_rent:
                 price_rent = car.price_ten * day_rent
+            if car.sail.sail != 0:
+                price_rent = car.price_one_five * day_rent * ((100 - car.sail.sail) / 100)
+            else:
+                pass
+            if form.cleaned_data['baby_seat']:
+                price_rent += 20
+            else:
+                pass
             order = Order(
                 name=request.user.username,
                 date_star=form.cleaned_data['date_star'],

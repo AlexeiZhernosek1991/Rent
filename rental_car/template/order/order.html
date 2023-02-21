@@ -5,6 +5,9 @@
 <div>
 <h2>Ваш заказ</h2>
  <p>{{ car.car_model }}</p>
+{% if car.sail.sail != 0 %}
+    <p>На автомобиль действует {{ car.sail }} от общей суммы аренды</p>
+ {% endif %}
  <p>Зарезервированные даты:</p>
 {% for order in get_orders_all %}
     {% if order.order_completed == False %}

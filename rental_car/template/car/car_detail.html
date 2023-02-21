@@ -4,7 +4,8 @@
      <div class="row">
          <div class="col-3">
             <h2>{{car.car_model}}</h2>
-            <p> Регистрационный знак - {{car.register_num}}<br>
+            <p> Год выпуска - {{car.year}}<br>
+             Регистрационный знак - {{car.register_num}}<br>
              Цвет - {{car.color}} <br>
              Тип кузова - {{car.body_type}}<br>
              Количество мест - {{car.places}}<br>
@@ -31,6 +32,9 @@
              <h4>Цена от 1 до 5 дней-{{car.price_one_five}} руб. </h4>
              <h4>Цена от 5 до 10 дней-{{car.price_five_ten}} руб. </h4>
              <h4>Цена от 10 дней-{{car.price_ten}} руб. </h4>
+             {% if car.sail.sail != 0 %}
+                <h2>{{car.sail}}</h2>
+             {% endif %}
              <h2><a href="{% url 'order' car.slug %}">Заказать {{car.car_model}}</a></h2>
          </div>
          <div class="col-4">
